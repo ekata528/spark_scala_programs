@@ -1,0 +1,18 @@
+import org.apache.spark.sql.SparkSession
+
+object rdd_prog extends App{
+
+  val spark = SparkSession.builder().master("local[3]")
+    .appName("leetcodeprob").getOrCreate()
+
+  spark.sparkContext.setLogLevel("ERROR")
+
+  val my_lst=List("ERROR: 22-03-1196")
+
+  val rdd1= spark.sparkContext.parallelize(my_lst)
+  val rdd2=rdd1.map(x=>x.split(":")(0)).map((_,1))
+  
+  rdd2.foreach(println)
+
+
+}
