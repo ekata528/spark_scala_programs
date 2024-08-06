@@ -1,0 +1,26 @@
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
+
+object DataFrame extends App {
+  val sparkConf = new SparkConf()
+  sparkConf.set("spark.app.name","DataFrame")
+  sparkConf.set("spark.master", "local[*]")
+
+  val spark = SparkSession.builder()
+    .config(sparkConf)
+    .getOrCreate()
+
+  val OrderDF = spark.read
+    .option("header", true)
+    .option("inferSchema",true)
+    .csv("C:\\Users\\abhis\\OneDrive\\Desktop\\EkataBigdata\\week11- spark core depth and data frames\\3.datasets\\orders.csv")
+
+  val  RDD1= OrderDF.repartition(4)
+    .where("order_customer_id>1000")
+    .select("order_id","order_status","order_customer_id")
+    .groupBy("order_status")
+    .count()
+  RDD1.show()
+  scala.io.StdIn.readLine()
+spark.stop()
+}
