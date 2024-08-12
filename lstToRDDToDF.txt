@@ -1,0 +1,24 @@
+import org.apache.spark.sql.SparkSession
+
+object rdd_prog extends App{
+
+  val spark = SparkSession.builder().master("local[3]")
+    .appName("leetcodeprob").getOrCreate()
+
+  spark.sparkContext.setLogLevel("ERROR")
+
+  val data = Seq(
+    (1, "John Doe", "1990-01-01"),
+    (2, "Jane Smith", "1985-05-15"),
+    (3, "Nisa Dash", "1990-09-01"),
+    (4, "Esha mishra", "1986-08-15")
+  )
+ // list to rdd
+  val rdd1= spark.sparkContext.parallelize(data)
+  val rdd2= spark.createDataFrame(rdd1).toDF("id","Name","Dob")
+ 
+
+  rdd2.show()
+
+
+}
