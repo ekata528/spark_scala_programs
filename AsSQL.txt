@@ -1,0 +1,26 @@
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
+import java.sql.Timestamp
+object DataFrame extends App {
+  val sparkConf = new SparkConf()
+  sparkConf.set("spark.app.name","DataFrame")
+  sparkConf.set("spark.master", "local[*]")
+
+  val spark = SparkSession.builder()
+    .config(sparkConf)
+    .getOrCreate()
+import spark.implicits._
+  val OrderDF = spark.read
+    .format("csv")
+    .option("header", true)
+    .option("inferSchema",true)
+    .option("path","C:\\Users\\abhis\\OneDrive\\Desktop\\EkataBigdata\\week11- spark core depth and data frames\\3.datasets\\orders.csv")
+    .load()
+
+  OrderDF.createOrReplaceTempView("orders")
+  spark.sql("SELECT * FROM orders").show()
+  //val OrderDS=OrderDF.as[order]    convert DF into DS
+
+  scala.io.StdIn.readLine()
+spark.stop()
+}
