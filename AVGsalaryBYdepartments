@@ -1,0 +1,32 @@
+import UDFRegistrationExample.spark
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+
+object handelNull extends App {
+
+  // Set up Spark configuration and create SparkSession
+  val sparkConf = new SparkConf()
+  sparkConf.set("spark.app.name", "DataFrame")
+  sparkConf.set("spark.master", "local[*]")
+
+  val spark = SparkSession.builder
+    .config(sparkConf)
+    .getOrCreate()
+
+
+  import spark.implicits._
+
+  // Create a DataFrame with some null values
+  val df = Seq(
+    ("John", "IT", 1000),
+    ("Doe", "NoneIT", 1200),
+    ("Jane", "IT", 1000),
+    ("Smith", "NoneIT", 1000)
+  ).toDF("name", "department", "salary")
+  val df2 = df.createOrReplaceTempView("employee")
+ val df3=spark.sql("select department, AVG(salary) from employee group by department"  )
+
+df3.show()
+  spark.stop()
+}
